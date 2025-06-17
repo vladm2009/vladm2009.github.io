@@ -124,6 +124,10 @@
       padding: 4px 8px;
       cursor: pointer;
     }
+    .flex {
+      width: 100%;
+      display: flex;
+    }
     body.night {
       background-color: #121212;
       color: #eee;
@@ -156,6 +160,7 @@
       <button onclick="loadVideos('Հայկական նորություններ')">📰 Լուրեր</button>
     </div>
     <div class="main">
+      <div class="flex">
       <div class="language-switcher">
         Լեզու / Language:
         <button onclick="setLang('hy')">Հայ</button>
@@ -165,6 +170,7 @@
         <button onclick="toggleNightMode()">🌙 Գիշերային / Night Mode</button>
       </div>
       <div class="time-display" id="time">Ժամը...</div>
+    </div>
       <div class="video-wrapper" id="player-wrapper">
         <div class="placeholder">Խնդրում ենք ընտրել ինչ-որ ալիք</div>
       </div>
