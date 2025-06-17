@@ -152,13 +152,14 @@
   <div class="container">
     <div class="sidebar">
       <h2>Ալիքներ</h2>
-      <button onclick="loadVideos('Armenia TV Սյուրպրիզ')">🎁 Սյուրպրիզ</button>
-      <button onclick="loadVideos('Armenia TV Ցով աղջիկների պատշարով')">👩‍❤️‍💋‍👩 Ցով աղջիկների պատշարով</button>
-      <button onclick="loadVideos('Shant TV Մարիա')">👩 Մարիա</button>
-      <button onclick="loadVideos('Armenia TV Women\'s Club')">💃 Women’s Club</button>
-      <button onclick="loadVideos('Հայկական կինո')">🎬 Հայկական կինո</button>
-      <button onclick="loadVideos('Հայկական նորություններ')">📰 Լուրեր</button>
+      <button class="channel" onclick="loadVideos('Armenia TV Սյուրպրիզ')">🎁 Սյուրպրիզ</button>
+      <button class="channel" onclick="loadVideos('Armenia TV Ցով աղջիկների պատշարով')">👩‍❤️‍💋‍👩 Ցով աղջիկների պատշարով</button>
+      <button class="channel" onclick="loadVideos('Shant TV Մարիա')">👩 Մարիա</button>
+      <button class="channel" onclick="loadVideos('Armenia TV Women\'s Club')">💃 Women’s Club</button>
+      <button class="channel" onclick="loadVideos('Հայկական կինո')">🎬 Հայկական կինո</button>
+      <button class="channel" onclick="loadVideos('Հայկական նորություններ')">📰 Լուրեր</button>
     </div>
+
     <div class="main">
       <div class="refresh-button" style="position:absolute; top:70px; right:20px;">
         <button id="refreshBtn" onclick="refreshVideos()">Թարմացնել</button>
@@ -167,16 +168,18 @@
         <button onclick="toggleNightMode()">🌙 Գիշերային / Night Mode</button>
       </div>
       <div class="time-display" id="time">Ժամը...</div>
-    </div>
+
       <div class="video-wrapper" id="player-wrapper">
         <div class="placeholder">Խնդրում ենք ընտրել ինչ-որ ալիք</div>
       </div>
+
       <div class="controls" id="controls" style="display: none;">
         <button onclick="prev()">Նախորդ</button>
         <button onclick="next()">Հաջորդ</button>
       </div>
     </div>
   </div>
+</body>
   <script>
   const apiKey = "AIzaSyCMw5B0okuY4RciY2LxFvVAs1WaEIu_7sk";
   let videos = [];
