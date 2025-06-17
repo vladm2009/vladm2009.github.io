@@ -2,7 +2,7 @@
 <html lang="hy">
 <head>
   <meta charset="UTF-8">
-  <title>Հայկական Շոուներ - API տարբերակ</title>
+  <title>Հայկական Շոուներ - Աշխատող տարբերակ</title>
   <style>
     html, body {
       margin: 0;
@@ -103,9 +103,6 @@
       font-size: 24px;
       text-align: center;
     }
-  </style>
-
-  <style>
     .language-switcher {
       position: absolute;
       top: 10px;
@@ -158,7 +155,6 @@
       <button onclick="loadVideos('Հայկական կինո')">🎬 Հայկական կինո</button>
       <button onclick="loadVideos('Հայկական նորություններ')">📰 Լուրեր</button>
     </div>
-    
     <div class="main">
       <div class="language-switcher">
         Լեզու / Language:
@@ -168,7 +164,6 @@
       <div class="night-mode-toggle">
         <button onclick="toggleNightMode()">🌙 Գիշերային / Night Mode</button>
       </div>
-
       <div class="time-display" id="time">Ժամը...</div>
       <div class="video-wrapper" id="player-wrapper">
         <div class="placeholder">Խնդրում ենք ընտրել ինչ-որ ալիք</div>
@@ -181,16 +176,22 @@
   </div>
 
   <script>
-    const apiKey = "AIzaSyCMw5B0okuY4RciY2LxFvVAs1WaEIu_7sk"; // <= сюда вставить API ключ
+    const apiKey = "YOUR_API_KEY";
     let videos = [];
     let currentIndex = 0;
+    let lang = 'hy';
+    let night = false;
+    let autoPlayTimer;
 
-    async function loadVideos(query) {
-      const response = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&maxResults=10&type=video&key=${apiKey}`);
-      const data = await response.json();
-      videos = data.items.map(item => item.id.videoId);
-      currentIndex = 0;
-      show();
+    function loadVideos(query) {
+      fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&maxResults=10&type=video&key=${apiKey}`)
+        .then(res => res.json())
+        .then(data => {
+          videos = data.items.map(item => item.id.videoId);
+          currentIndex = 0;
+          show();
+          autoPlay();
+        });
     }
 
     function show() {
@@ -226,12 +227,12 @@
       document.getElementById("time").textContent = `⏰ Ժամը ${hours}:${minutes}`;
     }
 
-    setInterval(updateTime, 10000);
-    updateTime();
-  
-    let lang = 'hy';
-    let night = false;
-    let autoPlayTimer;
+    function autoPlay() {
+      clearInterval(autoPlayTimer);
+      autoPlayTimer = setInterval(() => {
+        next();
+      }, 30000);
+    }
 
     function setLang(l) {
       lang = l;
@@ -256,25 +257,10 @@
       document.body.classList.toggle('night', night);
     }
 
-    function autoPlay() {
-      clearInterval(autoPlayTimer);
-      autoPlayTimer = setInterval(() => {
-        next();
-      }, 30000); // 30 секунд
-    }
-
-    function loadVideos(query) {
-      fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&maxResults=10&type=video&key=${apiKey}`)
-        .then(res => res.json())
-        .then(data => {
-          videos = data.items.map(item => item.id.videoId);
-          currentIndex = 0;
-          show();
-          autoPlay();
-        });
-    }
-
+    setInterval(updateTime, 10000);
+    updateTime();
     updateTexts();
-
+  </script>
 </body>
 </html>
+
