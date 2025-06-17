@@ -158,8 +158,10 @@
       <button class="channel" onclick="loadVideos('Armenia TV Women\'s Club')">Women’s Club</button>
       <button class="channel" onclick="loadVideos('Հայկական կինո')">Հայկական կինո</button>
       <button class="channel" onclick="loadVideos('Հայկական նորություններ')">Լուրեր</button>
+      <button class="channel" onclick="loadVideos('հայկական մանկական երգեր')">🎵 Մանկական Երգեր</button>
+      <button class="channel" onclick="loadVideos('հայկական երգեր')">🎤 Հայկական Երգեր</button>
+      <button class="channel" onclick="loadVideos('հայկական մուլտֆիլմեր')">🎞 Մուլտֆիլմեր</button>
     </div>
-
     <div class="main">
       <div class="refresh-button" style="position:absolute; top:70px; right:20px;">
         <button id="refreshBtn" onclick="refreshVideos()">Թարմացնել</button>
@@ -250,8 +252,8 @@
   function updateTexts() {
     const btns = document.querySelectorAll(".sidebar button.channel");
     const map = {
-      hy: ["🎁 Սյուրպրիզ", "👩‍❤️‍💋‍👩 Ցով աղջիկների պատշարով", "👩 Մարիա", "💃 Women’s Club", "🎬 Հայկական կինո", "📰 Լուրեր"],
-      en: ["🎁 Surprise", "👩‍❤️‍💋‍👩 Girls Show", "👩 Maria", "💃 Women’s Club", "🎬 Armenian Movies", "📰 News"]
+      hy: ["Սյուրպրիզ", "Ցով աղջիկների պատշարով", "Մարիա", "Women’s Club", "Հայկական կինո", "Լուրեր"],
+      en: ["Surprise", "Girls Show", "Maria", "Women’s Club", "Armenian Movies", "News"]
     };
     btns.forEach((btn, i) => {
       btn.innerHTML = map[lang][i];
