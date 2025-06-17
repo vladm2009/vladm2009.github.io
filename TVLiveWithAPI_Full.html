@@ -71,8 +71,8 @@
       justify-content: center;
     }
     iframe {
-      width: 100%;
-      max-width: 100%;
+      width: 85%;
+      max-width: 85%;
       height: 550px;
       aspect-ratio: 16 / 9;
       border: none;
@@ -160,7 +160,9 @@
       <button onclick="loadVideos('Հայկական նորություններ')">📰 Լուրեր</button>
     </div>
     <div class="main">
-      <div class="flex">
+      <div class="refresh-button" style="position:absolute; top:70px; right:20px;">
+        <button id="refreshBtn" onclick="refreshVideos()">Թարմացնել</button>
+      </div>
       <div class="night-mode-toggle">
         <button onclick="toggleNightMode()">🌙 Գիշերային / Night Mode</button>
       </div>
@@ -175,93 +177,96 @@
       </div>
     </div>
   </div>
-
   <script>
-    const apiKey = "AIzaSyCMw5B0okuY4RciY2LxFvVAs1WaEIu_7sk";
-    let videos = [];
-    let currentIndex = 0;
-    let lang = 'hy';
-    let night = false;
-    let autoPlayTimer;
+  const apiKey = "AIzaSyCMw5B0okuY4RciY2LxFvVAs1WaEIu_7sk";
+  let videos = [];
+  let currentIndex = 0;
+  let lang = 'hy';
+  let night = false;
 
-    function loadVideos(query) {
-      fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&maxResults=10&type=video&key=${apiKey}`)
-        .then(res => res.json())
-        .then(data => {
-          videos = data.items.map(item => item.id.videoId);
-          currentIndex = 0;
-          show();
-          autoPlay();
-        });
-    }
+  let currentQuery = "";
 
-    function show() {
-      const wrapper = document.getElementById("player-wrapper");
-      const controls = document.getElementById("controls");
-      if (videos.length > 0) {
-        wrapper.innerHTML = `<iframe src="https://www.youtube.com/embed/${videos[currentIndex]}" allowfullscreen></iframe>`;
-        controls.style.display = "flex";
-      } else {
-        wrapper.innerHTML = "<div class='placeholder'>Չի գտնվել տեսանյութ</div>";
-        controls.style.display = "none";
-      }
-    }
-
-    function next() {
-      if (videos.length > 0) {
-        currentIndex = (currentIndex + 1) % videos.length;
+  function refreshVideos() {
+    if (!currentQuery) return;
+    fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(currentQuery)}&maxResults=10&type=video&key=${apiKey}`)
+      .then(res => res.json())
+      .then(data => {
+        if (!data.items) {
+          alert("Չհաջողվեց բեռնել տեսանյութեր");
+          return;
+        }
+        videos = data.items.map(item => item.id.videoId);
+        currentIndex = 0;
         show();
-      }
-    }
-
-    function prev() {
-      if (videos.length > 0) {
-        currentIndex = (currentIndex - 1 + videos.length) % videos.length;
-        show();
-      }
-    }
-
-    function updateTime() {
-      const now = new Date();
-      const hours = now.getHours().toString().padStart(2, "0");
-      const minutes = now.getMinutes().toString().padStart(2, "0");
-      document.getElementById("time").textContent = `⏰ Ժամը ${hours}:${minutes}`;
-    }
-
-    function autoPlay() {
-      clearInterval(autoPlayTimer);
-      autoPlayTimer = setInterval(() => {
-        next();
-      }, 30000);
-    }
-
-    function setLang(l) {
-      lang = l;
-      updateTexts();
-    }
-
-    function updateTexts() {
-      const btns = document.querySelectorAll(".sidebar button");
-      const map = {
-        hy: ["🎁 Սյուրպրիզ", "👩‍❤️‍💋‍👩 Ցով աղջիկների պատշարով", "👩 Մարիա", "💃 Women’s Club", "🎬 Հայկական կինո", "📰 Լուրեր"],
-        en: ["🎁 Surprise", "👩‍❤️‍💋‍👩 Girls Show", "👩 Maria", "💃 Women’s Club", "🎬 Armenian Movies", "📰 News"]
-      };
-      btns.forEach((btn, i) => {
-        btn.innerHTML = map[lang][i];
       });
-      document.querySelectorAll(".controls button")[0].textContent = lang === 'hy' ? "Նախորդ" : "Previous";
-      document.querySelectorAll(".controls button")[1].textContent = lang === 'hy' ? "Հաջորդ" : "Next";
-    }
+  }
 
-    function toggleNightMode() {
-      night = !night;
-      document.body.classList.toggle('night', night);
-    }
+  function loadVideos(query) {
+    currentQuery = query;
+    refreshVideos(); // загружается только один раз — при нажатии
+  }
 
-    setInterval(updateTime, 10000);
-    updateTime();
+  function show() {
+    const wrapper = document.getElementById("player-wrapper");
+    const controls = document.getElementById("controls");
+    if (videos.length > 0) {
+      wrapper.innerHTML = `<iframe src="https://www.youtube.com/embed/${videos[currentIndex]}" allowfullscreen></iframe>`;
+      controls.style.display = "flex";
+    } else {
+      wrapper.innerHTML = "<div class='placeholder'>Չի գտնվել տեսանյութ</div>";
+      controls.style.display = "none";
+    }
+  }
+
+  function next() {
+    if (videos.length > 0) {
+      currentIndex = (currentIndex + 1) % videos.length;
+      show();
+    }
+  }
+
+  function prev() {
+    if (videos.length > 0) {
+      currentIndex = (currentIndex - 1 + videos.length) % videos.length;
+      show();
+    }
+  }
+
+  function updateTime() {
+    const now = new Date();
+    const hours = now.getHours().toString().padStart(2, "0");
+    const minutes = now.getMinutes().toString().padStart(2, "0");
+    document.getElementById("time").textContent = `⏰ Ժամը ${hours}:${minutes}`;
+  }
+
+  function setLang(l) {
+    lang = l;
     updateTexts();
-  </script>
+  }
+
+  function updateTexts() {
+    const btns = document.querySelectorAll(".sidebar button.channel");
+    const map = {
+      hy: ["🎁 Սյուրպրիզ", "👩‍❤️‍💋‍👩 Ցով աղջիկների պատշարով", "👩 Մարիա", "💃 Women’s Club", "🎬 Հայկական կինո", "📰 Լուրեր"],
+      en: ["🎁 Surprise", "👩‍❤️‍💋‍👩 Girls Show", "👩 Maria", "💃 Women’s Club", "🎬 Armenian Movies", "📰 News"]
+    };
+    btns.forEach((btn, i) => {
+      btn.innerHTML = map[lang][i];
+    });
+    document.querySelectorAll(".controls button")[0].textContent = lang === 'hy' ? "Նախորդ" : "Previous";
+    document.querySelectorAll(".controls button")[1].textContent = lang === 'hy' ? "Հաջորդ" : "Next";
+    document.getElementById("refreshBtn").textContent = lang === 'hy' ? "Թարմացնել" : "Refresh";
+  }
+
+  function toggleNightMode() {
+    night = !night;
+    document.body.classList.toggle('night', night);
+  }
+
+  setInterval(updateTime, 10000);
+  updateTime();
+  updateTexts();
+</script>
 </body>
 </html>
 
