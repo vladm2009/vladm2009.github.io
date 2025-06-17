@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="hy">
 <head>
+  <link rel="icon" href="data:,">
   <meta charset="UTF-8">
   <title>Հայկական Շոուներ - Աշխատող տարբերակ</title>
   <style>
@@ -107,6 +108,7 @@
     }
     .night-mode-toggle {
       position: absolute;
+      top: 40px;
       left: 20px;
       font-size: 14px;
     }
@@ -202,10 +204,12 @@
     }
 
     function updateTime() {
+  try {
       const now = new Date();
       const hours = now.getHours().toString().padStart(2, "0");
       const minutes = now.getMinutes().toString().padStart(2, "0");
       document.getElementById("time").textContent = `⏰ Ժամը ${hours}:${minutes}`;
+  } catch(e) { console.warn('time element missing'); }
     }
 
     function updateTexts() {
