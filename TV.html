@@ -1,33 +1,32 @@
-
 <!DOCTYPE html>
 <html lang="hy">
 <head>
   <meta charset="UTF-8" />
   <title>Հայկական Շոուներ</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" href="data:,">
   <style>
+    * {
+      box-sizing: border-box;
+    }
     html, body {
       margin: 0;
       padding: 0;
       font-family: "Segoe UI", sans-serif;
-      height: 100%;
       background-color: #f0f0f0;
+      height: 100%;
     }
     .container {
       display: flex;
+      flex-direction: row;
       height: 100vh;
-      overflow: hidden;
     }
     .sidebar {
-      overflow-y: auto;
-      max-height: 100vh;
       width: 260px;
       background-color: #20232a;
       color: #fff;
       padding: 15px;
-      box-sizing: border-box;
-      display: flex;
-      flex-direction: column;
+      overflow-y: auto;
     }
     .sidebar h2 {
       font-size: 20px;
@@ -38,13 +37,14 @@
     }
     .sidebar button {
       margin-bottom: 10px;
-      padding: 12px 14px;
-      font-size: 15px;
+      padding: 12px;
+      font-size: 16px;
       background: #2c2f36;
       color: #fff;
       border: none;
       border-radius: 6px;
       cursor: pointer;
+      width: 100%;
       text-align: left;
       transition: background 0.3s;
     }
@@ -55,29 +55,25 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 20px;
+      padding: 10px;
       position: relative;
     }
     .time-display {
-      position: absolute;
-      top: 10px;
-      right: 20px;
       font-size: 16px;
       color: #555;
+      text-align: right;
+      margin-bottom: 10px;
     }
     .video-wrapper {
-      width: 100%;
       flex-grow: 1;
       display: flex;
       align-items: center;
       justify-content: center;
+      padding: 10px;
     }
     iframe {
-      width: 85%;
-      max-width: 85%;
-      height: 550px;
+      width: 100%;
+      max-width: 800px;
       aspect-ratio: 16 / 9;
       border: none;
       border-radius: 8px;
@@ -86,38 +82,44 @@
     .controls {
       display: flex;
       justify-content: center;
-      gap: 20px;
-      padding: 20px 0;
+      gap: 10px;
+      margin-top: 10px;
+      flex-wrap: wrap;
     }
-    .controls button {
-      font-size: 18px;
-      padding: 10px 24px;
-      cursor: pointer;
+    .controls button, #refreshBtn, .night-mode-toggle button {
+      font-size: 16px;
+      padding: 10px 16px;
       background: #20232a;
-      color: white;
+      color: #fff;
       border: none;
       border-radius: 5px;
-      transition: 0.3s;
+      cursor: pointer;
+      transition: background 0.3s;
     }
-    .controls button:hover {
+    .controls button:hover, #refreshBtn:hover, .night-mode-toggle button:hover {
       background-color: #ff6600;
     }
     .placeholder {
+      font-size: 18px;
       color: #777;
-      font-size: 24px;
       text-align: center;
     }
     .night-mode-toggle {
-      position: absolute;
-      left: 20px;
-      font-size: 14px;
-    }
-    .night-mode-toggle button {
-      padding: 4px 8px;
-      cursor: pointer;
+      margin-bottom: 10px;
     }
     .night {
       background-color: #2c2f36;
+      color: #eee;
+    }
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+      .sidebar {
+        width: 100%;
+        max-height: 200px;
+        overflow-y: auto;
+      }
     }
   </style>
 </head>
@@ -125,24 +127,24 @@
   <div class="container">
     <div class="sidebar">
       <h2>Ալիքներ</h2>
-      <button class="channel" onclick="loadVideos('Armenia TV Սյուրպրիզ')">Սյուրպրիզ</button>
-      <button class="channel" onclick="loadVideos('Armenia TV Ցով աղջիկների պատշարով')">Ծով աչքերի պատճառով</button>
-      <button class="channel" onclick="loadVideos('Shant TV Մարիա')">Մարիա</button>
-      <button class="channel" onclick="loadVideos('Armenia TV Women's Club')">Women’s Club</button>
-      <button class="channel" onclick="loadVideos('Հայկական կինո')">Հայկական կինո</button>
-      <button class="channel" onclick="loadVideos('Հայկական նորություններ')">Լուրեր</button>
-      <button class="channel" onclick="loadVideos('հայկական մանկական երգեր')">🎵 Մանկական Երգեր</button>
-      <button class="channel" onclick="loadVideos('հայկական երգեր')">🎤 Հայկական Երգեր</button>
-      <button class="channel" onclick="loadVideos('հայկական մուլտֆիլմեր')">🎞 Մուլտֆիլմեր</button>
+      <button onclick="loadVideos('Armenia TV Սյուրպրիզ')">Սյուրպրիզ</button>
+      <button onclick="loadVideos('Armenia TV Ցով աղջիկների պատշարով')">Ծով աչքերի պատճառով</button>
+      <button onclick="loadVideos('Shant TV Մարիա')">Մարիա</button>
+      <button onclick="loadVideos('Armenia TV Women\'s Club')">Women’s Club</button>
+      <button onclick="loadVideos('Հայկական կինո')">Հայկական կինո</button>
+      <button onclick="loadVideos('Հայկական նորություններ')">Լուրեր</button>
+      <button onclick="loadVideos('հայկական մանկական երգեր')">🎵 Մանկական Երգեր</button>
+      <button onclick="loadVideos('հայկական երգեր')">🎤 Հայկական Երգեր</button>
+      <button onclick="loadVideos('հայկական մուլտֆիլմեր')">🎞 Մուլտֆիլմեր</button>
     </div>
     <div class="main">
-      <div class="refresh-button" style="position:absolute; top:70px; right:20px;">
-        <button id="refreshBtn" onclick="refreshVideos()">Թարմացնել</button>
-      </div>
       <div class="night-mode-toggle">
         <button onclick="toggleNightMode()">🌙 Գիշերային / Night Mode</button>
       </div>
       <div class="time-display" id="time">Ժամը...</div>
+      <div style="text-align:right; margin-bottom:10px">
+        <button id="refreshBtn" onclick="refreshVideos()">Թարմացնել</button>
+      </div>
       <div class="video-wrapper" id="player-wrapper">
         <div class="placeholder">Խնդրում ենք ընտրել ինչ-որ ալիք</div>
       </div>
