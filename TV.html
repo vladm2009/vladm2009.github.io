@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>Հայկական Շոուներ</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" href="data:,">
   <style>
     html, body {
@@ -109,14 +110,31 @@
     .night-mode-toggle {
       position: absolute;
       left: 20px;
+      top: 10px;
       font-size: 14px;
     }
     .night-mode-toggle button {
       padding: 4px 8px;
       cursor: pointer;
     }
-    .night {
-      background-color: #f0f0f0;
+    body.night {
+      background-color: #1e1e1e;
+      color: #eee;
+    }
+    body.night .sidebar {
+      background-color: #151515;
+    }
+    body.night .sidebar button,
+    body.night .controls button,
+    body.night .night-mode-toggle button,
+    body.night #refreshBtn {
+      background-color: #333;
+      color: #fff;
+    }
+    body.night .sidebar button:hover,
+    body.night .controls button:hover,
+    body.night .night-mode-toggle button:hover {
+      background-color: #ff6600;
     }
   </style>
 </head>
@@ -127,7 +145,7 @@
       <button class="channel" onclick="loadVideos('Armenia TV')">Armenia TV</button>
       <button class="channel" onclick="loadVideos('Kentron TV')">Kentron TV</button>
       <button class="channel" onclick="loadVideos('Shant TV')">Shant TV</button>
-      <button class="channel" onclick="loadVideos("Womens Club")>Women’s Club</button>
+      <button class="channel" onclick="loadVideos('Womens Club')">Women’s Club</button>
       <button class="channel" onclick="loadVideos('Հայկական կինո')">Հայկական կինո</button>
       <button class="channel" onclick="loadVideos('Հայկական նորություններ')">Լուրեր</button>
       <button class="channel" onclick="loadVideos('հայկական մանկական երգեր')">🎵 Մանկական Երգեր</button>
@@ -151,16 +169,15 @@
       </div>
     </div>
   </div>
+
   <script>
     const apiKey = "AIzaSyCMw5B0okuY4RciY2LxFvVAs1WaEIu_7sk";
     let videos = [];
     let currentIndex = 0;
     let currentQuery = "";
-    let night = false;
 
     function toggleNightMode() {
-      night = !night;
-      document.body.classList.toggle('night', night);
+      document.body.classList.toggle('night');
     }
 
     function loadVideos(query) {
@@ -170,7 +187,7 @@
 
     function refreshVideos() {
       if (!currentQuery) return;
-      fetch(https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(currentQuery)}&maxResults=50&type=video&key=${apiKey})
+      fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(currentQuery)}&maxResults=50&type=video&key=${apiKey}`)
         .then(res => res.json())
         .then(data => {
           if (!data.items) {
@@ -187,7 +204,7 @@
       const wrapper = document.getElementById("player-wrapper");
       const controls = document.getElementById("controls");
       if (videos.length > 0) {
-        wrapper.innerHTML = <iframe src="https://www.youtube.com/embed/${videos[currentIndex]}" allowfullscreen></iframe>;
+        wrapper.innerHTML = `<iframe src="https://www.youtube.com/embed/${videos[currentIndex]}" allowfullscreen></iframe>`;
         controls.style.display = "flex";
       } else {
         wrapper.innerHTML = "<div class='placeholder'>Չի գտնվել տեսանյութ</div>";
@@ -196,14 +213,12 @@
     }
 
     function next() {
-      currentIndex++;
-      if (currentIndex >= videos.length) currentIndex = 0;
+      currentIndex = (currentIndex + 1) % videos.length;
       show();
     }
 
     function prev() {
-      currentIndex--;
-      if (currentIndex < 0) currentIndex = videos.length - 1;
+      currentIndex = (currentIndex - 1 + videos.length) % videos.length;
       show();
     }
 
@@ -212,16 +227,13 @@
       const hours = now.getHours().toString().padStart(2, "0");
       const minutes = now.getMinutes().toString().padStart(2, "0");
       const timeEl = document.getElementById("time");
-      if (timeEl) timeEl.textContent = ⏰ Ժամը ${hours}:${minutes};
+      timeEl.textContent = `⏰ Ժամը ${hours}:${minutes}`;
     }
 
     window.onload = () => {
-      setInterval(updateTime, 10000);
       updateTime();
+      setInterval(updateTime, 10000);
     };
   </script>
 </body>
 </html>
-
-
-
