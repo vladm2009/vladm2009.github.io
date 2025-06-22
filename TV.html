@@ -1,124 +1,180 @@
 <!DOCTYPE html>
 <html lang="hy">
 <head>
-  <meta charset="UTF-8" />
-  <title>Հայկական Շոուներ</title>
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Հայկական Շոուներ</title>
   <link rel="icon" href="data:,">
   <style>
+    :root {
+      --primary: #1e1e2f;
+      --secondary: #2c2c3e;
+      --accent: #ff5722;
+      --text-light: #f5f5f5;
+      --text-muted: #bbb;
+      --bg: #f4f4f7;
+    }
+
     * {
       box-sizing: border-box;
-    }
-    html, body {
       margin: 0;
       padding: 0;
-      font-family: "Segoe UI", sans-serif;
-      background-color: #f0f0f0;
-      height: 100%;
     }
+
+    body, html {
+      font-family: 'Segoe UI', sans-serif;
+      height: 100%;
+      background-color: var(--bg);
+      color: var(--primary);
+    }
+
     .container {
       display: flex;
       flex-direction: row;
       height: 100vh;
     }
+
     .sidebar {
       width: 260px;
-      background-color: #20232a;
-      color: #fff;
-      padding: 15px;
+      background-color: var(--primary);
+      color: var(--text-light);
+      padding: 20px;
       overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      border-right: 1px solid #444;
     }
+
     .sidebar h2 {
-      font-size: 20px;
-      text-align: center;
+      font-size: 22px;
       margin-bottom: 20px;
-      border-bottom: 1px solid #444;
+      border-bottom: 2px solid var(--accent);
       padding-bottom: 10px;
+      text-align: center;
     }
+
     .sidebar button {
-      margin-bottom: 10px;
-      padding: 12px;
-      font-size: 16px;
-      background: #2c2f36;
-      color: #fff;
+      background-color: var(--secondary);
       border: none;
+      padding: 12px 16px;
+      font-size: 16px;
       border-radius: 6px;
+      color: var(--text-light);
       cursor: pointer;
-      width: 100%;
+      transition: 0.3s ease;
       text-align: left;
-      transition: background 0.3s;
     }
+
     .sidebar button:hover {
-      background-color: #ff6600;
+      background-color: var(--accent);
     }
+
     .main {
       flex: 1;
       display: flex;
       flex-direction: column;
-      padding: 10px;
+      padding: 20px;
       position: relative;
+      background-color: #fff;
     }
-    .time-display {
-      font-size: 16px;
-      color: #555;
-      text-align: right;
-      margin-bottom: 10px;
-    }
-    .video-wrapper {
-      flex-grow: 1;
+
+    .top-bar {
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      justify-content: center;
-      padding: 10px;
+      margin-bottom: 20px;
     }
-    iframe {
-      width: 100%;
-      max-width: 800px;
-      aspect-ratio: 16 / 9;
+
+    .time-display {
+      font-size: 18px;
+      color: var(--accent);
+      font-weight: bold;
+    }
+
+    .night-mode-toggle button,
+    #refreshBtn {
+      background: var(--primary);
+      color: var(--text-light);
       border: none;
-      border-radius: 8px;
-      background: #000;
-    }
-    .controls {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin-top: 10px;
-      flex-wrap: wrap;
-    }
-    .controls button, #refreshBtn, .night-mode-toggle button {
-      font-size: 16px;
-      padding: 10px 16px;
-      background: #20232a;
-      color: #fff;
-      border: none;
+      padding: 8px 14px;
       border-radius: 5px;
       cursor: pointer;
       transition: background 0.3s;
     }
-    .controls button:hover, #refreshBtn:hover, .night-mode-toggle button:hover {
-      background-color: #ff6600;
+
+    .night-mode-toggle button:hover,
+    #refreshBtn:hover {
+      background: var(--accent);
     }
+
+    .video-wrapper {
+      flex-grow: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 10px;
+    }
+
+    iframe {
+      width: 85%;
+      height: 550px;
+      border: none;
+      border-radius: 10px;
+      background: #000;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    }
+
+    .controls {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .controls button {
+      background-color: var(--secondary);
+      color: var(--text-light);
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .controls button:hover {
+      background-color: var(--accent);
+    }
+
     .placeholder {
-      font-size: 18px;
-      color: #777;
+      font-size: 20px;
+      color: var(--text-muted);
       text-align: center;
     }
-    .night-mode-toggle {
-      margin-bottom: 10px;
-    }
+
     .night {
-      background-color: #2c2f36;
-      color: #eee;
+      background-color: #1a1a1a;
+      color: #ccc;
     }
+
     @media (max-width: 768px) {
       .container {
         flex-direction: column;
       }
+
       .sidebar {
         width: 100%;
         max-height: 200px;
+        flex-wrap: wrap;
+        flex-direction: row;
         overflow-y: auto;
+        gap: 8px;
+      }
+
+      iframe {
+        width: 100%;
+        height: 300px;
       }
     }
   </style>
@@ -126,7 +182,7 @@
 <body>
   <div class="container">
     <div class="sidebar">
-      <h2>Ալիքներ</h2>
+      <h2>📺 Ալիքներ</h2>
       <button onclick="loadVideos('Armenia TV Սյուրպրիզ')">Սյուրպրիզ</button>
       <button onclick="loadVideos('Armenia TV Ցով աղջիկների պատշարով')">Ծով աչքերի պատճառով</button>
       <button onclick="loadVideos('Shant TV Մարիա')">Մարիա</button>
@@ -138,19 +194,21 @@
       <button onclick="loadVideos('հայկական մուլտֆիլմեր')">🎞 Մուլտֆիլմեր</button>
     </div>
     <div class="main">
-      <div class="night-mode-toggle">
-        <button onclick="toggleNightMode()">🌙 Գիշերային / Night Mode</button>
-      </div>
-      <div class="time-display" id="time">Ժամը...</div>
-      <div style="text-align:right; margin-bottom:10px">
-        <button id="refreshBtn" onclick="refreshVideos()">Թարմացնել</button>
+      <div class="top-bar">
+        <div class="night-mode-toggle">
+          <button onclick="toggleNightMode()">🌙 Գիշերային / Night Mode</button>
+        </div>
+        <div class="time-display" id="time">Ժամը...</div>
+        <div>
+          <button id="refreshBtn" onclick="refreshVideos()">🔄 Թարմացնել</button>
+        </div>
       </div>
       <div class="video-wrapper" id="player-wrapper">
         <div class="placeholder">Խնդրում ենք ընտրել ինչ-որ ալիք</div>
       </div>
       <div class="controls" id="controls" style="display: none;">
-        <button onclick="prev()">Նախորդ</button>
-        <button onclick="next()">Հաջորդ</button>
+        <button onclick="prev()">⏮ Նախորդ</button>
+        <button onclick="next()">⏭ Հաջորդ</button>
       </div>
     </div>
   </div>
@@ -199,14 +257,12 @@
     }
 
     function next() {
-      currentIndex++;
-      if (currentIndex >= videos.length) currentIndex = 0;
+      currentIndex = (currentIndex + 1) % videos.length;
       show();
     }
 
     function prev() {
-      currentIndex--;
-      if (currentIndex < 0) currentIndex = videos.length - 1;
+      currentIndex = (currentIndex - 1 + videos.length) % videos.length;
       show();
     }
 
@@ -214,8 +270,7 @@
       const now = new Date();
       const hours = now.getHours().toString().padStart(2, "0");
       const minutes = now.getMinutes().toString().padStart(2, "0");
-      const timeEl = document.getElementById("time");
-      if (timeEl) timeEl.textContent = `⏰ Ժամը ${hours}:${minutes}`;
+      document.getElementById("time").textContent = `⏰ Ժամը ${hours}:${minutes}`;
     }
 
     window.onload = () => {
@@ -225,3 +280,4 @@
   </script>
 </body>
 </html>
+
